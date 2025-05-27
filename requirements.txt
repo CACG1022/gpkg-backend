@@ -3,3 +3,4 @@ uvicorn
 geopandas
 pandas
 shapely
+python-multipart

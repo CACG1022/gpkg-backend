@@ -9,12 +9,13 @@ async def procesar_gpkg(file: UploadFile = File(...)):
     try:
         contents = await file.read()
 
-        # Crear archivo temporal
+        # Crear y cerrar archivo temporal
         with tempfile.NamedTemporaryFile(delete=False, suffix=".gpkg") as tmp:
             tmp.write(contents)
+            tmp.flush()  # ⚠️ Asegura que se escriba al disco
             tmp_path = tmp.name
 
-        # Leer el archivo desde disco
+        # Ahora sí lo puede leer geopandas
         gdf = gpd.read_file(tmp_path)
 
         return {
@@ -25,3 +26,4 @@ async def procesar_gpkg(file: UploadFile = File(...)):
 
     except Exception as e:
         return {"error": str(e)}
+
